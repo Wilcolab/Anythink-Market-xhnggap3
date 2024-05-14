@@ -11,7 +11,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 mongoose.connection.once('open', async () => {
-  console.log('MongoDB connected successfully');
   try {
     const userIds = await createUsers();
     const itemIds = await createItems(userIds);
@@ -20,7 +19,6 @@ mongoose.connection.once('open', async () => {
     console.error('Error during seeding:', err);
   } finally {
     mongoose.disconnect();
-    console.log('Finished seeding database.');
   }
 });
 
@@ -35,7 +33,6 @@ async function createUsers() {
     try {
       await user.save();
       userIds.push(user._id);
-      console.log(`User ${i} created: ${user.username}`);
     } catch (err) {
       console.error(`Error creating user ${i}: ${err}`);
     }
@@ -62,7 +59,6 @@ async function createItems(userIds) {
     try {
       await item.save();
       itemIds.push(item._id);
-      console.log(`Item ${i} created: ${item.title}`);
     } catch (err) {
       console.error(`Error creating item ${i}: ${err}`);
     }
@@ -87,7 +83,6 @@ async function createComments(userIds, itemIds) {
     const comment = new Comment(commentData);
     try {
       await comment.save();
-      console.log(`Comment ${i} created for item ID ${comment.item}`);
     } catch (err) {
       console.error(`Error creating comment ${i}: ${err}`);
     }
